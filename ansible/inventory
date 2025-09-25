@@ -1,0 +1,16 @@
+# Ansible Inventory File for Scientific Calculator Deployment
+# This file defines the target hosts for deployment
+
+[local]
+localhost ansible_connection=local
+
+[local:vars]
+# Variables for local deployment
+ansible_python_interpreter=/usr/bin/python3
+ansible_become=yes
+ansible_become_method=sudo
+
+# Application specific variables
+app_name=scientific-calculator
+docker_registry=docker.io
+docker_username=your-dockerhub-username
