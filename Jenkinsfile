@@ -107,13 +107,22 @@ pipeline {
             steps {
                 echo 'Pushing Docker image to Docker Hub...'
                 script {
-                    // Push to Docker Hub
-                    withDockerRegistry([credentialsId: 'dockerhub-credentials', url: 'https://index.docker.io/v1/']) {
-                        sh """
-                            /Applications/Docker.app/Contents/Resources/bin/docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
-                            /Applications/Docker.app/Contents/Resources/bin/docker push ${DOCKER_IMAGE}:${DOCKER_LATEST}
-                        """
-                    }
+                    // Push to Docker Hub using basic docker commands
+                    sh """
+                        export PATH="/Applications/Docker.app/Contents/Resources/bin:\$PATH"
+                        export DOCKER_CONFIG=\${HOME}/.docker
+                        
+                        echo "Logging in to Docker Hub..."
+                        echo "Note: Using Docker Desktop authentication"
+                        
+                        echo "Pushing ${DOCKER_IMAGE}:${DOCKER_TAG}..."
+                        /Applications/Docker.app/Contents/Resources/bin/docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        
+                        echo "Pushing ${DOCKER_IMAGE}:${DOCKER_LATEST}..."
+                        /Applications/Docker.app/Contents/Resources/bin/docker push ${DOCKER_IMAGE}:${DOCKER_LATEST}
+                        
+                        echo "Docker images pushed successfully!"
+                    """
                 }
             }
         }
