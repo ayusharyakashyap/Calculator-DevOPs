@@ -42,7 +42,7 @@ pipeline {
             post {
                 always {
                     // Publish test results
-                    publishTestResults testResultsPattern: 'target/surefire-reports/*.xml'
+                    junit testResultsPattern: 'target/surefire-reports/*.xml'
                     
                     // Archive test reports
                     archiveArtifacts artifacts: 'target/surefire-reports/*', fingerprint: true
@@ -80,8 +80,8 @@ pipeline {
                 script {
                     // Build Docker image
                     sh """
-                        docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-                        docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:${DOCKER_LATEST}
+                        /Applications/Docker.app/Contents/Resources/bin/docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                        /Applications/Docker.app/Contents/Resources/bin/docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:${DOCKER_LATEST}
                     """
                 }
             }
@@ -94,7 +94,7 @@ pipeline {
                     // Test the Docker image
                     sh """
                         echo "Testing Docker image..."
-                        docker run --rm ${DOCKER_IMAGE}:${DOCKER_TAG} java -version
+                        /Applications/Docker.app/Contents/Resources/bin/docker run --rm ${DOCKER_IMAGE}:${DOCKER_TAG} java -version
                         echo "Docker image test completed successfully"
                     """
                 }
@@ -108,8 +108,8 @@ pipeline {
                     // Push to Docker Hub
                     withDockerRegistry([credentialsId: 'dockerhub-credentials', url: 'https://index.docker.io/v1/']) {
                         sh """
-                            docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
-                            docker push ${DOCKER_IMAGE}:${DOCKER_LATEST}
+                            /Applications/Docker.app/Contents/Resources/bin/docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+                            /Applications/Docker.app/Contents/Resources/bin/docker push ${DOCKER_IMAGE}:${DOCKER_LATEST}
                         """
                     }
                 }
@@ -150,8 +150,8 @@ pipeline {
             
             // Clean up Docker images to save space
             sh '''
-                docker system prune -f
-                docker image prune -f
+                /Applications/Docker.app/Contents/Resources/bin/docker system prune -f
+                /Applications/Docker.app/Contents/Resources/bin/docker image prune -f
             '''
         }
         
@@ -174,7 +174,7 @@ pipeline {
                     - Pushed to Docker Hub
                     - Deployed using Ansible
                 """,
-                to: "your-email@example.com"
+                to: "ayusharyakashyap@example.com"
             )
         }
         
@@ -193,7 +193,7 @@ pipeline {
                     
                     Please check the build logs for more details.
                 """,
-                to: "your-email@example.com"
+                to: "ayusharyakashyap@example.com"
             )
         }
     }
