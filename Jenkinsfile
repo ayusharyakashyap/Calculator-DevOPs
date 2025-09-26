@@ -5,7 +5,7 @@ pipeline {
         // Define environment variables
         MAVEN_HOME = tool 'Maven-3.9.11'
         JAVA_HOME = tool 'JDK-11'
-        DOCKER_IMAGE = 'your-dockerhub-username/scientific-calculator'
+        DOCKER_IMAGE = 'ayusharyakashyap/scientific-calculator'
         DOCKER_TAG = "${BUILD_NUMBER}"
         DOCKER_LATEST = 'latest'
     }
