@@ -62,7 +62,9 @@
 
     - name: Display image pull results
       debug:
-        msg: "Docker image {{ docker_image }} pulled successfully"    - name: Run Scientific Calculator container
+        msg: "Docker image {{ docker_image }} pulled successfully"
+
+    - name: Run Scientific Calculator container
       command: >
         /Applications/Docker.app/Contents/Resources/bin/docker run -d 
         --name {{ container_name }}
