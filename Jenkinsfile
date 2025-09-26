@@ -131,10 +131,10 @@ pipeline {
             steps {
                 echo 'Deploying application using Ansible...'
                 script {
-                    // Run Ansible playbook
+                    // Run Ansible playbook with full path
                     sh """
                         cd ansible
-                        ansible-playbook -i localhost, -c local playbook.yml \
+                        /Users/ayusharyakashyap/Library/Python/3.9/bin/ansible-playbook -i localhost, -c local playbook.yml \
                             --extra-vars "docker_image=${DOCKER_IMAGE}:${DOCKER_TAG}"
                     """
                 }
