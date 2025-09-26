@@ -1,107 +1,101 @@
 ---
-# Ansible Playbook for Scientific Calculator Deployment
-# Author: Your Name
-# Description: Deploy Scientific Calculator Docker container
+# Simplified Ansible Playbook for Scientific Calculator Deployment
+# Author: Student DevOps Project
+# Description: Deploy Scientific Calculator Docker container locally
 
 - name: Deploy Scientific Calculator Application
   hosts: localhost
   connection: local
-  become: yes
+  gather_facts: no
+  become: no
   
   vars:
     app_name: "scientific-calculator"
-    docker_image: "{{ docker_image | default('your-dockerhub-username/scientific-calculator:latest') }}"
+    docker_image: "{{ docker_image | default('scientific-calculator:1.0.0') }}"
     container_name: "{{ app_name }}-container"
     host_port: 8080
     container_port: 8080
-    log_dir: "/var/log/{{ app_name }}"
     
   tasks:
     - name: Print deployment information
       debug:
         msg: |
+          ==========================================
           Starting deployment of Scientific Calculator
           Docker Image: {{ docker_image }}
           Container Name: {{ container_name }}
+          Host Port: {{ host_port }}
+          ==========================================
           
-    - name: Check if Docker is installed
-      command: docker --version
-      register: docker_version
-      failed_when: false
+    - name: Check if Docker is running
+      command: docker ps
+      register: docker_status
+      failed_when: docker_status.rc != 0
       
-    - name: Display Docker version
+    - name: Display Docker status
       debug:
-        msg: "Docker version: {{ docker_version.stdout }}"
-      when: docker_version.rc == 0
-      
-    - name: Fail if Docker is not installed
-      fail:
-        msg: "Docker is not installed. Please install Docker first."
-      when: docker_version.rc != 0
-      
-    - name: Create log directory
-      file:
-        path: "{{ log_dir }}"
-        state: directory
-        mode: '0755'
+        msg: "Docker is running successfully"
+      when: docker_status.rc == 0
         
     - name: Stop existing container if running
-      docker_container:
-        name: "{{ container_name }}"
-        state: absent
-      ignore_errors: yes
+      command: docker stop {{ container_name }}
+      register: stop_result
+      failed_when: false
+      changed_when: stop_result.rc == 0
       
     - name: Remove existing container
-      docker_container:
-        name: "{{ container_name }}"
-        state: absent
-      ignore_errors: yes
+      command: docker rm {{ container_name }}
+      register: remove_result
+      failed_when: false
+      changed_when: remove_result.rc == 0
       
-    - name: Pull latest Docker image
-      docker_image:
-        name: "{{ docker_image }}"
-        source: pull
-        force_source: yes
-      register: pull_result
-      
-    - name: Display image pull result
+    - name: Display container cleanup results
       debug:
-        msg: "Docker image pulled successfully: {{ pull_result.image.Id }}"
-      when: pull_result.changed
+        msg: |
+          Container stop result: {{ 'Success' if stop_result.rc == 0 else 'Not running' }}
+          Container remove result: {{ 'Success' if remove_result.rc == 0 else 'Not found' }}
+      
+    - name: Check if Docker image exists locally
+      shell: "docker images | grep {{ docker_image }}"
+      register: image_check
+      failed_when: false
+      
+    - name: Display image availability
+      debug:
+        msg: "Docker image {{ docker_image }} is available locally"
+      when: image_check.rc == 0
+      
+    - name: Fail if image not found
+      fail:
+        msg: "Docker image {{ docker_image }} not found. Please build the image first."
+      when: image_check.rc != 0
       
     - name: Run Scientific Calculator container
-      docker_container:
-        name: "{{ container_name }}"
-        image: "{{ docker_image }}"
-        state: started
-        restart_policy: always
-        ports:
-          - "{{ host_port }}:{{ container_port }}"
-        volumes:
-          - "{{ log_dir }}:/app/logs"
-        environment:
-          JAVA_OPTS: "-Xms256m -Xmx512m"
-        labels:
-          app: "{{ app_name }}"
-          version: "1.0.0"
-          managed_by: "ansible"
-          
-    - name: Wait for container to be running
-      wait_for:
-        timeout: 30
-      delegate_to: localhost
+      command: >
+        docker run -d 
+        --name {{ container_name }}
+        --restart always
+        -p {{ host_port }}:{{ container_port }}
+        {{ docker_image }}
+      register: run_result
       
+    - name: Display container start result
+      debug:
+        msg: "Container started with ID: {{ run_result.stdout[:12] }}"
+        
+    - name: Wait for container to be ready
+      pause:
+        seconds: 5
+        
     - name: Verify container is running
-      docker_container_info:
-        name: "{{ container_name }}"
-      register: container_info
+      shell: "docker ps --filter 'name={{ container_name }}'"
+      register: container_status
       
     - name: Display container status
       debug:
         msg: |
-          Container Status: {{ container_info.container.State.Status }}
-          Container ID: {{ container_info.container.Id[:12] }}
-          Image: {{ container_info.container.Config.Image }}
+          Container Status:
+          {{ container_status.stdout }}
           
     - name: Check container logs
       command: docker logs {{ container_name }} --tail 10
@@ -109,52 +103,41 @@
       
     - name: Display recent container logs
       debug:
-        msg: "Recent logs: {{ container_logs.stdout_lines }}"
+        msg: |
+          Recent Container Logs:
+          {{ container_logs.stdout }}
         
-    - name: Create deployment verification script
-      copy:
-        content: |
-          #!/bin/bash
-          echo "=== Scientific Calculator Deployment Verification ==="
-          echo "Date: $(date)"
-          echo "Container Status:"
-          docker ps | grep {{ container_name }}
-          echo ""
-          echo "Container Details:"
-          docker inspect {{ container_name }} | jq '.[] | {Name: .Name, State: .State.Status, Image: .Config.Image}'
-          echo ""
-          echo "Recent Logs:"
-          docker logs {{ container_name }} --tail 5
-          echo "=== Verification Complete ==="
-        dest: "/tmp/verify_deployment.sh"
-        mode: '0755'
-        
-    - name: Run deployment verification
-      command: /tmp/verify_deployment.sh
-      register: verification
+    - name: Test application accessibility
+      uri:
+        url: "http://localhost:{{ host_port }}"
+        method: GET
+        timeout: 10
+      register: health_check
+      failed_when: false
       
-    - name: Display verification results
+    - name: Display health check result
       debug:
-        msg: "{{ verification.stdout_lines }}"
+        msg: |
+          {% if health_check.status is defined %}
+          Application health check: {{ 'PASSED' if health_check.status == 200 else 'FAILED' }}
+          Response code: {{ health_check.status }}
+          {% else %}
+          Application health check: Console application - no HTTP endpoint
+          {% endif %}
         
-  handlers:
-    - name: Clean up old Docker images
-      command: docker image prune -f
-      
   post_tasks:
-    - name: Summary of deployment
+    - name: Deployment Summary
       debug:
         msg: |
           ===============================================
           DEPLOYMENT COMPLETED SUCCESSFULLY
           ===============================================
           Application: Scientific Calculator
-          Container: {{ container_name }}
-          Image: {{ docker_image }}
-          Port Mapping: {{ host_port }}:{{ container_port }}
-          Log Directory: {{ log_dir }}
+          Container Name: {{ container_name }}
+          Docker Image: {{ docker_image }}
+          Port Mapping: localhost:{{ host_port }}
           
-          To interact with the application:
+          To interact with the calculator:
           docker exec -it {{ container_name }} java -jar /app/scientific-calculator.jar
           
           To view logs:
@@ -162,4 +145,7 @@
           
           To stop the application:
           docker stop {{ container_name }}
+          
+          To remove the container:
+          docker rm {{ container_name }}
           ===============================================

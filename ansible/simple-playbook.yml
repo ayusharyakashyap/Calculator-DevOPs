@@ -1,0 +1,48 @@
+---
+# Simple Ansible Deployment for Scientific Calculator
+- name: Deploy Scientific Calculator
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  become: no
+  
+  vars:
+    container_name: "scientific-calculator-app"
+    docker_image: "scientific-calculator:1.0.0"
+    
+  tasks:
+    - name: Check Docker status
+      command: docker --version
+      register: docker_check
+      
+    - name: Stop existing container
+      command: docker stop {{ container_name }}
+      ignore_errors: yes
+      
+    - name: Remove existing container  
+      command: docker rm {{ container_name }}
+      ignore_errors: yes
+      
+    - name: Deploy Scientific Calculator container
+      command: docker run -d --name {{ container_name }} -it {{ docker_image }}
+      register: deploy_result
+      
+    - name: Show deployment result
+      debug:
+        msg: "Container deployed with ID: {{ deploy_result.stdout[:12] }}"
+        
+    - name: Check container status
+      command: docker ps -a --filter "name={{ container_name }}"
+      register: status_check
+      
+    - name: Display container status
+      debug:
+        msg: "{{ status_check.stdout_lines }}"
+        
+    - name: Test calculator interaction
+      command: docker exec {{ container_name }} echo "Calculator is running in container"
+      register: test_result
+      
+    - name: Show test result
+      debug:
+        msg: "{{ test_result.stdout }}"
