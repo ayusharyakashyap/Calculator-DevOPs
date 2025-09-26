@@ -42,7 +42,7 @@ pipeline {
             post {
                 always {
                     // Publish test results
-                    junit testResultsPattern: 'target/surefire-reports/*.xml'
+                    junit testResults: 'target/surefire-reports/*.xml'
                     
                     // Archive test reports
                     archiveArtifacts artifacts: 'target/surefire-reports/*', fingerprint: true
