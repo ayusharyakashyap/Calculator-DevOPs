@@ -28,7 +28,7 @@
           ==========================================
           
     - name: Check if Docker is running
-      command: docker ps
+      command: /Applications/Docker.app/Contents/Resources/bin/docker ps
       register: docker_status
       failed_when: docker_status.rc != 0
       
@@ -38,13 +38,13 @@
       when: docker_status.rc == 0
         
     - name: Stop existing container if running
-      command: docker stop {{ container_name }}
+      command: /Applications/Docker.app/Contents/Resources/bin/docker stop {{ container_name }}
       register: stop_result
       failed_when: false
       changed_when: stop_result.rc == 0
       
     - name: Remove existing container
-      command: docker rm {{ container_name }}
+      command: /Applications/Docker.app/Contents/Resources/bin/docker rm {{ container_name }}
       register: remove_result
       failed_when: false
       changed_when: remove_result.rc == 0
@@ -56,7 +56,7 @@
           Container remove result: {{ 'Success' if remove_result.rc == 0 else 'Not found' }}
       
     - name: Check if Docker image exists locally
-      shell: "docker images | grep {{ docker_image }}"
+      shell: "/Applications/Docker.app/Contents/Resources/bin/docker images | grep {{ docker_image }}"
       register: image_check
       failed_when: false
       
@@ -72,7 +72,7 @@
       
     - name: Run Scientific Calculator container
       command: >
-        docker run -d 
+        /Applications/Docker.app/Contents/Resources/bin/docker run -d 
         --name {{ container_name }}
         --restart always
         -p {{ host_port }}:{{ container_port }}
@@ -88,7 +88,7 @@
         seconds: 5
         
     - name: Verify container is running
-      shell: "docker ps --filter 'name={{ container_name }}'"
+      shell: "/Applications/Docker.app/Contents/Resources/bin/docker ps --filter 'name={{ container_name }}'"
       register: container_status
       
     - name: Display container status
@@ -98,7 +98,7 @@
           {{ container_status.stdout }}
           
     - name: Check container logs
-      command: docker logs {{ container_name }} --tail 10
+      command: /Applications/Docker.app/Contents/Resources/bin/docker logs {{ container_name }} --tail 10
       register: container_logs
       
     - name: Display recent container logs
