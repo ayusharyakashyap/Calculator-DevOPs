@@ -78,8 +78,10 @@ pipeline {
             steps {
                 echo 'Building Docker image...'
                 script {
-                    // Build Docker image
+                    // Build Docker image with proper credential access
                     sh """
+                        export PATH="/Applications/Docker.app/Contents/Resources/bin:\$PATH"
+                        export DOCKER_CONFIG=\${HOME}/.docker
                         /Applications/Docker.app/Contents/Resources/bin/docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                         /Applications/Docker.app/Contents/Resources/bin/docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:${DOCKER_LATEST}
                     """
