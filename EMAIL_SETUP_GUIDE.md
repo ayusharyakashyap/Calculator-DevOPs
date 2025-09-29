@@ -2,13 +2,13 @@
 
 Complete guide to set up email notifications in Jenkins for your DevOps pipeline.
 
-## Prerequisites ✅
+## Prerequisites 
 
 - [x] Jenkins running on localhost:8080
 - [x] Gmail account: ayush06022004@gmail.com
 - [x] Updated Jenkinsfile with your email address
 
-## Step 1: Generate Gmail App Password 🔑
+## Step 1: Generate Gmail App Password 
 
 Since Gmail uses 2-factor authentication, you need an App Password:
 
