@@ -8,6 +8,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "ayusharyak/scientific-calculator"
         DOCKER_TAG = "${BUILD_NUMBER}"
+        DOCKER_LATEST = "latest"
         DOCKER_REGISTRY = "docker.io"
     }
     
