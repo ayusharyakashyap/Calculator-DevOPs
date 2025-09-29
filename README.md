@@ -2,7 +2,7 @@
 
 A comprehensive scientific calculator application demonstrating complete DevOps implementation including CI/CD, containerization, and automated deployment.
 
-<!-- Email Test: September 29, 2025 - Testing email notifications after SMTP configuration -->
+<!-- SMTP Test: September 29, 2025 - Validating email delivery after Gmail app password setup -->
 
 ## Features
 
