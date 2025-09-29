@@ -10,6 +10,7 @@ pipeline {
         DOCKER_TAG = "${BUILD_NUMBER}"
         DOCKER_LATEST = "latest"
         DOCKER_REGISTRY = "docker.io"
+        NOTIFICATION_EMAIL = "ayush06022004@gmail.com"
     }
     
     tools {
