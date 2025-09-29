@@ -1,4 +1,4 @@
-# Jenkins Email Configuration Guide 📧
+# Jenkins Email Configuration Guide
 
 Complete guide to set up email notifications in Jenkins for your DevOps pipeline.
 
@@ -28,7 +28,7 @@ Since Gmail uses 2-factor authentication, you need an App Password:
    Example: abcd efgh ijkl mnop
    ```
 
-## Step 2: Install Email Extension Plugin 🔌
+## Step 2: Install Email Extension Plugin
 
 ### 2.1 Install Plugin
 1. Go to Jenkins: http://localhost:8080
@@ -42,7 +42,7 @@ Since Gmail uses 2-factor authentication, you need an App Password:
 - Go to **Manage Jenkins** → **System Configuration**
 - You should see **Extended E-mail Notification** section
 
-## Step 3: Configure SMTP Settings 📮
+## Step 3: Configure SMTP Settings
 
 ### 3.1 System Configuration
 1. Go to **Manage Jenkins** → **Configure System**
@@ -54,10 +54,10 @@ Configure these exact settings:
 ```
 SMTP server: smtp.gmail.com
 SMTP port: 587
-Advanced → Use SMTP Authentication: ✅ (checked)
+Advanced → Use SMTP Authentication: [checked]
 User Name: ayush06022004@gmail.com
 Password: [Your 16-character app password]
-Use SSL: ✅ (checked)
+Use SSL: [checked]
 SMTP port: 587
 ```
 
@@ -73,7 +73,7 @@ Default Subject: Jenkins Build: $PROJECT_NAME - Build #$BUILD_NUMBER - $BUILD_ST
 3. Click **Test configuration**
 4. Check your email for test message
 
-## Step 4: Configure Global Email Settings 📬
+## Step 4: Configure Global Email Settings
 
 ### 4.1 Jenkins Location
 1. In **System Configuration** → **Jenkins Location**
@@ -84,14 +84,14 @@ Default Subject: Jenkins Build: $PROJECT_NAME - Build #$BUILD_NUMBER - $BUILD_ST
 2. Configure:
    ```
    SMTP server: smtp.gmail.com
-   Advanced → Use SMTP Authentication: ✅
+   Advanced → Use SMTP Authentication: [checked]
    User Name: ayush06022004@gmail.com
    Password: [Your app password]
-   Use SSL: ✅
+   Use SSL: [checked]
    SMTP Port: 587
    ```
 
-## Step 5: Test Email Configuration 🧪
+## Step 5: Test Email Configuration
 
 ### 5.1 Manual Test
 1. Create a simple Jenkins job
@@ -104,7 +104,7 @@ Your updated Jenkinsfile already includes email notifications. When you push cod
 1. Success emails will be sent with build details
 2. Failure emails will include error information and console links
 
-## Step 6: Troubleshooting 🛠️
+## Step 6: Troubleshooting
 
 ### Common Issues:
 
@@ -145,25 +145,25 @@ Solution:
    telnet smtp.gmail.com 587
    ```
 
-## Step 7: Email Templates 📝
+## Step 7: Email Templates
 
 Your pipeline will send these types of emails:
 
 ### Success Email Features:
-- ✅ HTML formatted with green theme
-- 📋 Complete build information
-- 📝 Git commit details (hash, author, message)
-- 🔗 Direct links to Docker Hub and Jenkins console
-- ✅ Detailed list of completed tasks
+- HTML formatted with green theme
+- Complete build information
+- Git commit details (hash, author, message)
+- Direct links to Docker Hub and Jenkins console
+- Detailed list of completed tasks
 
 ### Failure Email Features:
-- ❌ HTML formatted with red theme
-- 🚨 Error details and failed stage information
-- 🔗 Direct link to console output for debugging
-- 📝 Troubleshooting steps
-- 👤 Commit information that triggered the failure
+- HTML formatted with red theme
+- Error details and failed stage information
+- Direct link to console output for debugging
+- Troubleshooting steps
+- Commit information that triggered the failure
 
-## Step 8: Security Best Practices 🔒
+## Step 8: Security Best Practices
 
 ### 8.1 App Password Security
 - Store app password securely
@@ -174,7 +174,7 @@ Your pipeline will send these types of emails:
 - Consider using Jenkins Credential Store
 - Set up credential binding for sensitive data
 
-## Step 9: Advanced Configuration 🚀
+## Step 9: Advanced Configuration
 
 ### 9.1 Multiple Recipients
 Update Jenkinsfile for multiple emails:
@@ -198,11 +198,11 @@ Your emails already include:
 - Task completion status
 - Docker Hub links
 
-## Expected Email Content 📨
+## Expected Email Content
 
 ### Success Email Sample:
 ```
-Subject: 🎉 Jenkins Build SUCCESS: Scientific-Calculator-Pipeline - Build #25
+Subject: Jenkins Build SUCCESS: Scientific-Calculator-Pipeline - Build #25
 
 Content:
 - Build information with links
@@ -214,7 +214,7 @@ Content:
 
 ### Failure Email Sample:
 ```
-Subject: ❌ Jenkins Build FAILED: Scientific-Calculator-Pipeline - Build #25
+Subject: Jenkins Build FAILED: Scientific-Calculator-Pipeline - Build #25
 
 Content:
 - Error details and failed stage
@@ -223,7 +223,7 @@ Content:
 - Troubleshooting steps
 ```
 
-## Step 10: Verify Complete Setup ✅
+## Step 10: Verify Complete Setup
 
 After configuration:
 
@@ -232,7 +232,7 @@ After configuration:
 3. **Email sent on success/failure**
 4. **Check email for proper formatting**
 
-## Quick Setup Commands 💻
+## Quick Setup Commands
 
 ```bash
 # Test SMTP connection
@@ -247,7 +247,7 @@ tail -f ~/.jenkins/logs/jenkins.log
 
 ---
 
-**🎯 Your email setup is now complete!**
+**Your email setup is now complete!**
 
 Push any code change to GitHub and you'll receive detailed email notifications about your DevOps pipeline status.
 
@@ -255,7 +255,7 @@ Push any code change to GitHub and you'll receive detailed email notifications a
 1. Configure Gmail App Password
 2. Set up SMTP in Jenkins
 3. Test with a code push
-4. Enjoy automatic email notifications! 📧✨
+4. Enjoy automatic email notifications!
 
 **Created**: September 29, 2025
 **Email**: ayush06022004@gmail.com

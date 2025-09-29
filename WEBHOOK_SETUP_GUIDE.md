@@ -1,15 +1,15 @@
-# GitHub Webhook Setup Guide 🚀
+# GitHub Webhook Setup Guide
 
 This guide will help you set up GitHub webhooks to automatically trigger your Jenkins pipeline when you push code to your repository.
 
-## Prerequisites ✅
+## Prerequisites
 
 - [x] Jenkins running on localhost:8080
 - [x] Enhanced Jenkinsfile with webhook triggers
 - [x] GitHub repository (Calculator-DevOPs)
 - [x] Complete DevOps pipeline working
 
-## Option 1: Using ngrok (Recommended for Development) 🌐
+## Option 1: Using ngrok (Recommended for Development)
 
 ### Step 1: Install ngrok
 ```bash
@@ -57,7 +57,7 @@ Forwarding                    https://abc123.ngrok.io -> http://localhost:8080
    - **Payload URL**: `https://abc123.ngrok.io/github-webhook/`
    - **Content type**: `application/json`
    - **Which events**: Select "Just the push event"
-   - **Active**: ✅ Checked
+   - **Active**: [Checked]
 6. Click **Add webhook**
 
 ### Step 5: Test the Webhook
@@ -71,7 +71,7 @@ git push origin main
 ```
 3. Check Jenkins at http://localhost:8080 - you should see a new build automatically started!
 
-## Option 2: Using GitHub Actions (Alternative) 🔄
+## Option 2: Using GitHub Actions (Alternative)
 
 If ngrok doesn't work, you can set up GitHub Actions to trigger Jenkins:
 
@@ -93,25 +93,25 @@ jobs:
           --user "admin:YOUR_JENKINS_TOKEN"
 ```
 
-## Webhook Flow Diagram 📊
+## Webhook Flow Diagram
 
 ```
 GitHub Push → Webhook → ngrok → Jenkins → Pipeline Stages
      ↓
-1. 🔄 Pull GitHub Repo
-2. 🏗️ Build with Maven  
-3. 🧪 Run Test Cases
-4. 📦 Package Application
-5. 🐳 Build Docker Image
-6. 🧪 Test Docker Image
-7. 🔐 Login to Docker Hub
-8. 🚀 Push to Docker Hub
-9. 🚀 Deploy on Local System
-10. 🏥 Health Check
-11. 📧 Email Notification
+1. Pull GitHub Repo
+2. Build with Maven  
+3. Run Test Cases
+4. Package Application
+5. Build Docker Image
+6. Test Docker Image
+7. Login to Docker Hub
+8. Push to Docker Hub
+9. Deploy on Local System
+10. Health Check
+11. Email Notification
 ```
 
-## Email Configuration 📧
+## Email Configuration
 
 To enable email notifications, configure Jenkins:
 
@@ -120,7 +120,7 @@ To enable email notifications, configure Jenkins:
 3. Configure SMTP settings:
    - **SMTP server**: smtp.gmail.com (for Gmail)
    - **SMTP port**: 587
-   - **Use SMTP Authentication**: ✅
+   - **Use SMTP Authentication**: [checked]
    - **Username**: your-email@gmail.com
    - **Password**: your-app-password
 4. Update the email address in Jenkinsfile:
@@ -128,7 +128,7 @@ To enable email notifications, configure Jenkins:
    to: "your-actual-email@gmail.com"
    ```
 
-## Troubleshooting 🛠️
+## Troubleshooting
 
 ### Common Issues:
 
@@ -161,22 +161,22 @@ curl -X POST https://your-ngrok-url.ngrok.io/github-webhook/ \
 tail -f ~/.jenkins/logs/jenkins.log
 ```
 
-## Security Notes 🔒
+## Security Notes
 
 - ngrok free tier has limitations (2 hours session, random URLs)
 - For production, use proper reverse proxy or cloud hosting
 - Never expose Jenkins directly to internet without authentication
 - Use webhook secrets for additional security
 
-## Next Steps 🎯
+## Next Steps
 
-1. ✅ Set up ngrok and expose Jenkins
-2. ✅ Configure GitHub webhook
-3. ✅ Test with a sample push
-4. ✅ Configure email notifications
-5. ✅ Document the complete automated flow
+1. Set up ngrok and expose Jenkins
+2. Configure GitHub webhook
+3. Test with a sample push
+4. Configure email notifications
+5. Document the complete automated flow
 
-Once this is working, your complete DevOps pipeline will be fully automated! 🚀
+Once this is working, your complete DevOps pipeline will be fully automated!
 
 ---
 
