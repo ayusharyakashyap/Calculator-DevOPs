@@ -265,7 +265,7 @@ pipeline {
                         <p><em>This email was sent automatically by Jenkins CI/CD pipeline.</em></p>
                     """,
                     mimeType: 'text/html',
-                    to: "ayusharyakashyap@example.com"
+                    to: "ayush06022004@gmail.com"
                 )
                 
                 echo "📧 Success notification email sent!"
@@ -316,7 +316,7 @@ pipeline {
                         <p><em>This email was sent automatically by Jenkins CI/CD pipeline.</em></p>
                     """,
                     mimeType: 'text/html',
-                    to: "ayusharyakashyap@example.com"
+                    to: "ayush06022004@gmail.com"
                 )
                 
                 echo "📧 Failure notification email sent!"
