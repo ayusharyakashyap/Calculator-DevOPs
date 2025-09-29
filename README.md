@@ -2,7 +2,7 @@
 
 A comprehensive scientific calculator application demonstrating complete DevOps implementation including CI/CD, containerization, and automated deployment.
 
-<!-- Pipeline Test: September 29, 2025 - Testing complete DevOps pipeline with email notifications -->
+<!-- Email Test: September 29, 2025 - Testing email notifications after SMTP configuration -->
 
 ## Features
 
